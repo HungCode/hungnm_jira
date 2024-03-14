@@ -1,0 +1,41 @@
+version: '3.3'
+
+networks:
+  atlassian:
+    external: true
+
+volumes:
+  jira_home:
+    external: true
+  jira_install:
+    external: true
+
+services:
+  jira:
+    image: atlassian/jira-software:8.16
+    container_name: jira
+    volumes:
+      - jira_home:/var/atlassian/application-data/jira
+      - jira_install:/opt/atlassian
+    environment:
+      - TZ=Asia/Ho_Chi_Minh
+      #      - ATL_PROXY_PORT=443
+      #      - ATL_PROXY_NAME=jira
+      #      - ATL_TOMCAT_SCHEME=https
+      #      - ATL_TOMCAT_SECURE=true
+      - JVM_MINIMUM_MEMORY=512m
+      - JVM_MAXIMUM_MEMORY=13g
+      - JVM_RESERVED_CODE_CACHE_SIZE=512m
+      - ATL_TOMCAT_MAXTHREADS=100
+      - ATL_DB_TIMEOUT=30
+      - ATL_DB_POOLMAXSIZE=200
+    ports:
+      - 8082:8080
+    mem_limit: 13.5g
+    mem_reservation: 512m
+    restart: always
+    networks:
+      - atlassian
+
+
+
